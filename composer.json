@@ -1,0 +1,22 @@
+{
+    "name": "pickleboxer/ps_cartrulecleaner",
+    "description": "PrestaShop Module - Cart Rule Cleaner",
+    "license": "AFL-3.0",
+    "authors": [
+      {
+        "name": "PickleBoxer",
+        "email": "matic.vertacnik@icloud.com"
+      }
+    ],
+    "require-dev": {
+        "prestashop/php-dev-tools": "^4.3",
+        "phpstan/phpstan": "^1.9"
+    },
+    "config": {
+      "preferred-install": "dist",
+      "classmap-authoritative": true,
+      "optimize-autoloader": true,
+      "prepend-autoloader": false
+    },
+    "type": "prestashop-module"
+}
