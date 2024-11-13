@@ -37,12 +37,12 @@ class Ps_cartrulecleanerCronModuleFrontController extends ModuleFrontController
 
     public function display()
     {
-        $this->ajax = 1;
+        $this->ajax = true;
 
         if (!Tools::isPHPCLI()) {
             $this->ajaxRender('Forbidden call.');
 
-            return;
+            return false;
         }
 
         // Additional token checks
@@ -51,9 +51,8 @@ class Ps_cartrulecleanerCronModuleFrontController extends ModuleFrontController
         if ($token !== Ps_cartrulecleaner::getToken()) {
             $this->ajaxRender('Invalid token.');
 
-            return;
+            return false;
         }
-        // ...
 
         $this->ajaxRender("hello\nToken: " . $token . "\n");
 
@@ -63,6 +62,12 @@ class Ps_cartrulecleanerCronModuleFrontController extends ModuleFrontController
             FROM ' . _DB_PREFIX_ . 'cart_rule
             WHERE date_to < NOW() OR quantity = 0
         ');
+
+        if (!is_array($expiredCartRules)) {
+            $this->ajaxRender('Error fetching expired cart rules.');
+
+            return false;
+        }
 
         // Count the number of expired cart rules
         $expiredCartRulesCount = count($expiredCartRules);
@@ -77,5 +82,7 @@ class Ps_cartrulecleanerCronModuleFrontController extends ModuleFrontController
         }
 
         $this->ajaxRender("Expired cart rules have been deleted.\n");
+
+        return true;
     }
 }

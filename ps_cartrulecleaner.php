@@ -29,7 +29,7 @@ if (!defined('_PS_VERSION_')) {
 
 class Ps_cartrulecleaner extends Module
 {
-    protected $config_form = false;
+    protected bool $config_form = false;
 
     public function __construct()
     {
@@ -56,7 +56,7 @@ class Ps_cartrulecleaner extends Module
      * Don't forget to create update methods if needed:
      * http://doc.prestashop.com/display/PS16/Enabling+the+Auto-Update
      */
-    public function install()
+    public function install(): bool
     {
         if (!parent::install()) {
             return false;
@@ -77,16 +77,22 @@ class Ps_cartrulecleaner extends Module
         return parent::uninstall();
     }
 
-    public static function getToken()
+    public static function getToken(): string
     {
-        return Configuration::get('PS_CARTRULECLEANER_TOKEN');
+        $token = Configuration::get('PS_CARTRULECLEANER_TOKEN');
+
+        return $token !== false ? $token : '';
     }
 
     /**
      * Load the configuration form
      */
-    public function getContent()
+    public function getContent(): string
     {
+        if ($this->context->smarty === null) {
+            return '';
+        }
+
         $this->context->smarty->assign('module_dir', $this->_path);
 
         // Get the token and generate the cron command
